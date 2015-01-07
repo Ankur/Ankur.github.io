@@ -7,19 +7,19 @@
 <body>
   <img src="http://dash.ga.co/assets/anna.png">
   <script>
-	while(1==1)
-	{
 	var TestObject = Parse.Object.extend("TestObject");
 var query = new Parse.Query(TestObject);
 query.equalTo("cylinder", "newland");
 query.find({
   success: function(results) {
-    $("#demo").html("newland");
+    new();
   },
   error: function(error) {
     alert("Error: " + error.code + " " + error.message);
   }
 });
+function wow(){
+document.getElementById("demo").innerHTML="newland";
 }
 </script>
   <p>Hi! I'm Anna, a NYC-based marketer. Say hello!</p>
