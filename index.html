@@ -12,18 +12,17 @@
   <p id="demo"></p>
   <script>
   Parse.initialize("LCM2uCbTlZJL2IWDT8FBzovbabjOq2qrglnsA0ur", "sUmP03qt2mz9HAYseWOQTvww7knKASejk7oxVfYW");
-	var TestObject = Parse.Object.extend("TestObject");
-var query = new Parse.Query(TestObject);
-query.equalTo("cylinder", "newland");
-query.find({
-  success: function(results) {
-   alert("Successfully retrieved " + results.length + " scores.");
-   {
-  },
-  error: function(error) {
-    alert("Error: " + error.code + " " + error.message);
-  }
+
+var TestObject = Parse.Object.extend("TestObject");
+var testObject = new TestObject();
+testObject.save({foo: "bar"}).then(function(object) {
+  alert("yay! it worked");
 });
+
+var results = testObject.changedAttributes();
+
+alert(results);
+
 </script>
   <input type="email" placeholder="Your email">
   <input type="submit">
