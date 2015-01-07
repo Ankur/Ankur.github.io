@@ -17,7 +17,7 @@ var TestObject = Parse.Object.extend("TestObject");
 var testObject = new TestObject();
 
 
-var query = new Parse.Query(testObject);
+var query = new Parse.Query(TestObject);
 query.first({
   success: function(results) {
     // results is an array of Parse.Object.
