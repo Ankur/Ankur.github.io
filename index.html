@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+<script src="//www.parsecdn.com/js/parse-1.3.3.min.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
   <title>Anna Dowlin</title>
 </head>
@@ -9,6 +10,16 @@
   <input type="email" placeholder="Your email">
   <input type="submit">
 </body>
+
+<script>
+	Parse.initialize("LCM2uCbTlZJL2IWDT8FBzovbabjOq2qrglnsA0ur", "sUmP03qt2mz9HAYseWOQTvww7knKASejk7oxVfYW");
+	
+	var TestObject = Parse.Object.extend("TestObject");
+var testObject = new TestObject();
+testObject.save({foo: "bar"}).then(function(object) {
+  alert("yay! it worked");
+});
+</script>
 <!--<!DOCTYPE html>
 <html>
   <body>
