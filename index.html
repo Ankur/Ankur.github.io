@@ -17,9 +17,19 @@ var TestObject = Parse.Object.extend("TestObject");
 var testObject = new TestObject();
 
 
-var results = testObject.dirty("cylinder");
+var query = new Parse.Query(testObject);
+query.first({
+  success: function(results) {
+    // results is an array of Parse.Object.
+    alert(results);
 
-alert(results);
+  },
+
+  error: function(error) {
+    // error is an instance of Parse.Error.
+  }
+});
+
 
 
 </script>
