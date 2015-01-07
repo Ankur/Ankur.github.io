@@ -17,6 +17,7 @@ var query = new Parse.Query(TestObject);
 query.equalTo("cylinder", "newland");
 query.find({
   success: function(results) {
+  	    alert("Successfully retrieved " + results.length + " scores.");
   	if (results > 1)
   	{
     $("#demo").html("newland");
