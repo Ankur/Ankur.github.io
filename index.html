@@ -14,7 +14,7 @@ var query = new Parse.Query(TestObject);
 query.equalTo("cylinder", "newland");
 query.find({
   success: function(results) {
-    $("#regTitle").html("newland");
+    $("#demo").html("newland");
   },
   error: function(error) {
     alert("Error: " + error.code + " " + error.message);
