@@ -4,8 +4,8 @@ body {
       background-size: cover;
       background-position: center;
       color: white;
-      font-family: helvetica;
-    }
+      font-family: 'Open Sans', sans-serif;    
+      }
     p {
       font-size: 22px;
     }
