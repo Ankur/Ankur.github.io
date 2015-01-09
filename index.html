@@ -11,20 +11,31 @@
 	</head>
 
 	<body>
-	<br>
-	<h1>Age of Innocence</h1> <br> <br>
+	<p>Age of Innocence</p> <br> <br> <br>qa
   
 	  <button class="btn btn-success btn-large" id="b1"><i class="icon-folder-open"></i> Quote 1</button> <br> <br><br>
 	  <button class="btn btn-success btn-large" id="b2"><i class="icon-folder-open"></i> Quote 2</button> <br> <br><br>
 	  <button class="btn btn-success btn-large" id="b3"><i class="icon-folder-open"></i> Quote 3</button> <br> <br><br>
 	  <button class="btn btn-success btn-large" id="b4"><i class="icon-folder-open"></i> Quote 4</button> <br> <br><br>
-		<p>Current Character: </p><p id="cylinder"></p> <br>
-		<p>Player score: </p><p id="cardboard"></p> <br> 
-		<p>Class score: </p><p id="player"></-> <br> 
+		<div id="cylinder"></div>
+		<div id="cardboard"></div>
+		<div id="player"></div>
 
 		<script type="text/javascript">
-			var quotes1 = ["May1", "Newland1", "Mingott1", "Ellen1"];
-			var quotes2 = ["May2", "Newland2", "Mingott2", "Ellen2"];
+			var quotes1 = ["\“Yes it is awfully convenient...that you should be able to meet Ellen after all\"", "He pulled the sash down and turned back. Catch my death! he echoed\; and he felt like adding: \‘But I\’ve caught it already. I am dead I\’ve been dead for months and months.\’", "She was persuaded that irrepressible passion
+was the cause of his impatience\; and being an ardent
+admirer of impulsiveness (when it did not lead to the
+spending of money) she always received him with a
+genial twinkle of complicity and a play of allusion to
+which May seemed fortunately impervious.", "\“The real loneliness is living among all these kind people who only ask one to pretend!\”"];
+			var quotes2 = ["\“We can't behave like people in novels, though, can we?\”", "\“Each time you happen to me all over again.\”", "and had lived in affluence
+for half a century; but memories of her early
+straits had made her excessively thrifty, and though,
+when she bought a dress or a piece of furniture, she
+took care that it should be of the best, she could not
+bring herself to spend much on the transient pleasures
+of the table", "\"And you'll sit beside me, and
+we'll look, not at visions, but at realities.\""];
 			var buttons = ["#b1", "#b2", "#b3", "#b4"];
 
 			var quotevalue = Math.round(Math.random());
@@ -111,36 +122,48 @@
 			$('#b1').click(function() {
         		var text = $(this).text();
         		console.log(text);
-        		if ((text == "Newland1") && (($("#cylinder").text()) == "newland") )
+        		if ((text == "He pulled the sash down and turned back. Catch my death! he echoed\; and he felt like adding: \‘But I\’ve caught it already. I am dead I\’ve been dead for months and months.\’") && (($("#cylinder").text()) == "newland") )
         		{
         			playerval++;
         		}
 
-        		if ((text == "Newland2") && (($("#cylinder").text()) == "newland") )
+        		if ((text == "\“Each time you happen to me all over again.\”") && (($("#cylinder").text()) == "newland") )
         		{
         			playerval++;
         		}
-        		if ((text == "May1") && (($("#cylinder").text()) == "may") )
+        		if ((text == "\“Yes it is awfully convenient...that you should be able to meet Ellen after all\"") && (($("#cylinder").text()) == "may") )
         		{
         			playerval++;
         		}
-        		if ((text == "May2") && (($("#cylinder").text()) == "may") )
+        		if ((text == "\“We can't behave like people in novels, though, can we?\”") && (($("#cylinder").text()) == "may") )
         		{
         			playerval++;
         		}
-        		if ((text == "Mingott1") && (($("#cylinder").text()) == "mingott") )
+        		if ((text == "She was persuaded that irrepressible passion
+was the cause of his impatience\; and being an ardent
+admirer of impulsiveness (when it did not lead to the
+spending of money) she always received him with a
+genial twinkle of complicity and a play of allusion to
+which May seemed fortunately impervious.") && (($("#cylinder").text()) == "mingott") )
         		{
         			playerval++;
         		}
-        		if ((text == "Mingott2") && (($("#cylinder").text()) == "mingott") )
+        		if ((text == "and had lived in affluence
+for half a century; but memories of her early
+straits had made her excessively thrifty, and though,
+when she bought a dress or a piece of furniture, she
+took care that it should be of the best, she could not
+bring herself to spend much on the transient pleasures
+of the table") && (($("#cylinder").text()) == "mingott") )
         		{
         			playerval++;
         		}
-        		if ((text == "Ellen1") && (($("#cylinder").text()) == "ellen") )
+        		if ((text == "\“The real loneliness is living among all these kind people who only ask one to pretend!\”") && (($("#cylinder").text()) == "ellen") )
         		{
         			playerval++;
         		}
-        		if ((text == "Ellen2") && (($("#cylinder").text()) == "ellen") )
+        		if ((text == "\"And you'll sit beside me, and
+we'll look, not at visions, but at realities.\"") && (($("#cylinder").text()) == "ellen") )
         		{
         			playerval++;
         		}
@@ -148,36 +171,48 @@
         	$('#b2').click(function() {
         		var text = $(this).text();
         		console.log(text);
-        		if ((text == "Newland1") && (($("#cylinder").text()) == "newland") )
+        		if ((text == "He pulled the sash down and turned back. Catch my death! he echoed\; and he felt like adding: \‘But I\’ve caught it already. I am dead I\’ve been dead for months and months.\’") && (($("#cylinder").text()) == "newland") )
         		{
         			playerval++;
         		}
 
-        		if ((text == "Newland2") && (($("#cylinder").text()) == "newland") )
+        		if ((text == "\“Each time you happen to me all over again.\”") && (($("#cylinder").text()) == "newland") )
         		{
         			playerval++;
         		}
-        		if ((text == "May1") && (($("#cylinder").text()) == "may") )
+        		if ((text == "\“Yes it is awfully convenient...that you should be able to meet Ellen after all\"") && (($("#cylinder").text()) == "may") )
         		{
         			playerval++;
         		}
-        		if ((text == "May2") && (($("#cylinder").text()) == "may") )
+        		if ((text == "\“We can't behave like people in novels, though, can we?\”") && (($("#cylinder").text()) == "may") )
         		{
         			playerval++;
         		}
-        		if ((text == "Mingott1") && (($("#cylinder").text()) == "mingott") )
+        		if ((text == "She was persuaded that irrepressible passion
+was the cause of his impatience\; and being an ardent
+admirer of impulsiveness (when it did not lead to the
+spending of money) she always received him with a
+genial twinkle of complicity and a play of allusion to
+which May seemed fortunately impervious.") && (($("#cylinder").text()) == "mingott") )
         		{
         			playerval++;
         		}
-        		if ((text == "Mingott2") && (($("#cylinder").text()) == "mingott") )
+        		if ((text == "and had lived in affluence
+for half a century; but memories of her early
+straits had made her excessively thrifty, and though,
+when she bought a dress or a piece of furniture, she
+took care that it should be of the best, she could not
+bring herself to spend much on the transient pleasures
+of the table") && (($("#cylinder").text()) == "mingott") )
         		{
         			playerval++;
         		}
-        		if ((text == "Ellen1") && (($("#cylinder").text()) == "ellen") )
+        		if ((text == "\“The real loneliness is living among all these kind people who only ask one to pretend!\”") && (($("#cylinder").text()) == "ellen") )
         		{
         			playerval++;
         		}
-        		if ((text == "Ellen2") && (($("#cylinder").text()) == "ellen") )
+        		if ((text == "\"And you'll sit beside me, and
+we'll look, not at visions, but at realities.\"") && (($("#cylinder").text()) == "ellen") )
         		{
         			playerval++;
         		}
@@ -185,36 +220,48 @@
         	$('#b3').click(function() {
         		var text = $(this).text();
         		console.log(text);
-        		if ((text == "Newland1") && (($("#cylinder").text()) == "newland") )
+        		if ((text == "He pulled the sash down and turned back. Catch my death! he echoed\; and he felt like adding: \‘But I\’ve caught it already. I am dead I\’ve been dead for months and months.\’") && (($("#cylinder").text()) == "newland") )
         		{
         			playerval++;
         		}
 
-        		if ((text == "Newland2") && (($("#cylinder").text()) == "newland") )
+        		if ((text == "\“Each time you happen to me all over again.\”") && (($("#cylinder").text()) == "newland") )
         		{
         			playerval++;
         		}
-        		if ((text == "May1") && (($("#cylinder").text()) == "may") )
+        		if ((text == "\“Yes it is awfully convenient...that you should be able to meet Ellen after all\"") && (($("#cylinder").text()) == "may") )
         		{
         			playerval++;
         		}
-        		if ((text == "May2") && (($("#cylinder").text()) == "may") )
+        		if ((text == "\“We can't behave like people in novels, though, can we?\”") && (($("#cylinder").text()) == "may") )
         		{
         			playerval++;
         		}
-        		if ((text == "Mingott1") && (($("#cylinder").text()) == "mingott") )
+        		if ((text == "She was persuaded that irrepressible passion
+was the cause of his impatience\; and being an ardent
+admirer of impulsiveness (when it did not lead to the
+spending of money) she always received him with a
+genial twinkle of complicity and a play of allusion to
+which May seemed fortunately impervious.") && (($("#cylinder").text()) == "mingott") )
         		{
         			playerval++;
         		}
-        		if ((text == "Mingott2") && (($("#cylinder").text()) == "mingott") )
+        		if ((text == "and had lived in affluence
+for half a century; but memories of her early
+straits had made her excessively thrifty, and though,
+when she bought a dress or a piece of furniture, she
+took care that it should be of the best, she could not
+bring herself to spend much on the transient pleasures
+of the table") && (($("#cylinder").text()) == "mingott") )
         		{
         			playerval++;
         		}
-        		if ((text == "Ellen1") && (($("#cylinder").text()) == "ellen") )
+        		if ((text == "\“The real loneliness is living among all these kind people who only ask one to pretend!\”") && (($("#cylinder").text()) == "ellen") )
         		{
         			playerval++;
         		}
-        		if ((text == "Ellen2") && (($("#cylinder").text()) == "ellen") )
+        		if ((text == "\"And you'll sit beside me, and
+we'll look, not at visions, but at realities.\"") && (($("#cylinder").text()) == "ellen") )
         		{
         			playerval++;
         		}
@@ -222,36 +269,48 @@
         	$('#b4').click(function() {
         		var text = $(this).text();
         		console.log(text);
-        		if ((text == "Newland1") && (($("#cylinder").text()) == "newland") )
+        		if ((text == "He pulled the sash down and turned back. Catch my death! he echoed\; and he felt like adding: \‘But I\’ve caught it already. I am dead I\’ve been dead for months and months.\’") && (($("#cylinder").text()) == "newland") )
         		{
         			playerval++;
         		}
 
-        		if ((text == "Newland2") && (($("#cylinder").text()) == "newland") )
+        		if ((text == "\“Each time you happen to me all over again.\”") && (($("#cylinder").text()) == "newland") )
         		{
         			playerval++;
         		}
-        		if ((text == "May1") && (($("#cylinder").text()) == "may") )
+        		if ((text == "\“Yes it is awfully convenient...that you should be able to meet Ellen after all\"") && (($("#cylinder").text()) == "may") )
         		{
         			playerval++;
         		}
-        		if ((text == "May2") && (($("#cylinder").text()) == "may") )
+        		if ((text == "\“We can't behave like people in novels, though, can we?\”") && (($("#cylinder").text()) == "may") )
         		{
         			playerval++;
         		}
-        		if ((text == "Mingott1") && (($("#cylinder").text()) == "mingott") )
+        		if ((text == "She was persuaded that irrepressible passion
+was the cause of his impatience\; and being an ardent
+admirer of impulsiveness (when it did not lead to the
+spending of money) she always received him with a
+genial twinkle of complicity and a play of allusion to
+which May seemed fortunately impervious.") && (($("#cylinder").text()) == "mingott") )
         		{
         			playerval++;
         		}
-        		if ((text == "Mingott2") && (($("#cylinder").text()) == "mingott") )
+        		if ((text == "and had lived in affluence
+for half a century; but memories of her early
+straits had made her excessively thrifty, and though,
+when she bought a dress or a piece of furniture, she
+took care that it should be of the best, she could not
+bring herself to spend much on the transient pleasures
+of the table") && (($("#cylinder").text()) == "mingott") )
         		{
         			playerval++;
         		}
-        		if ((text == "Ellen1") && (($("#cylinder").text()) == "ellen") )
+        		if ((text == "\“The real loneliness is living among all these kind people who only ask one to pretend!\”") && (($("#cylinder").text()) == "ellen") )
         		{
         			playerval++;
         		}
-        		if ((text == "Ellen2") && (($("#cylinder").text()) == "ellen") )
+        		if ((text == "\"And you'll sit beside me, and
+we'll look, not at visions, but at realities.\"") && (($("#cylinder").text()) == "ellen") )
         		{
         			playerval++;
         		}
