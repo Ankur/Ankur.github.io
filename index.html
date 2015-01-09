@@ -126,8 +126,10 @@
 			$('#b1').click(function() {
         		var text = $(this).text();
         		console.log(text);
-        		if ((text == "He pulled the sash down and turned back. Catch my death! He echoed and he felt like adding: \
-			\"but Ive caught it already. I am dead Ive been dead for months and months\"") && (($("#cylinder").text()) == "newland") )
+        		var myRegExp = /sash/;
+			var matchPos1 = text.search(myRegExp);
+
+        		if ((matchPos1 != -1) && (($("#cylinder").text()) == "newland") )
         		{
         			playerval++;
         		}
