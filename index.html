@@ -349,7 +349,27 @@
 				$.parse.post("QuoteObject", { cardboard: "0" }, function(json) { 
      			task.data('id', json.objectId);
     			});
-				});
+    			if (quotevalue == 0)
+			{
+				shuffle(quotes2);
+				console.log(quotes2);
+				for(var i = 0; i<=3; i++) 
+				{
+				$(buttons[i]).html(quotes2[i]);
+				}	
+			}
+
+			if (quotevalue == 1)
+			{
+				shuffle(quotes1);
+				console.log(quotes1);
+
+				for(var i = 0; i<=3; i++) 
+				{
+				$(buttons[i]).html(quotes1[i]);
+				}
+			}
+			});
 		</script>
 	</body>
 </html>
