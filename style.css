@@ -6,6 +6,9 @@ body {
       color: white;
       font-family: 'Open Sans', sans-serif;    
       }
-    p {
+    h1 {
       font-size: 50px;
+    }
+    p {
+          font-size: 24px;
     }
