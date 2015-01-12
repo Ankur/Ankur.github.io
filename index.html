@@ -1,69 +1,112 @@
-<!-- 
-2  
-3 Learning to access sensors in JavaScript. 
-4  
-5 This code is free software: you can redistribute it and/or modify it under 
-6 the terms of the GNU Lesser General Public License as published by the Free 
-7 Software Foundation, either version 3 of the License, or (at your option) 
-8 any later version. 
-9  
-10 This code is distributed in the hope that it will be useful, but WITHOUT ANY 
-11 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
-12 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for 
-13 more details. 
-14  
-15 You should have received a copy of the GNU Lesser General Public License 
-16 along with code. If not, see <http://www.gnu.org/licenses/>. 
-17  
-18 If you find this icon useful, please consider a small donation. 
-19 BTC 15uqTVo63i3RDCPgTxjmFGLLGZA7zezXuL 
-20  
-21 --> 
-22 <!DOCTYPE html> 
-23 <html> 
-24 <head> 
-25 <meta charset="UTF-8"/> 
-26 <title>Sensors</title> 
-27 <script type="text/javascript"> 
-28 function motion(event){ 
-29   document.getElementById("accelerometer").innerHTML = "Accelerometer: " 
-30     + event.accelerationIncludingGravity.x + ", " 
-31     + event.accelerationIncludingGravity.y + ", " 
-32     + event.accelerationIncludingGravity.z; 
-33 } 
-34  
-35 function orientation(event){ 
-36   document.getElementById("magnetometer").innerHTML = "Magnetometer: " 
-37     + event.alpha + ", " 
-38     + event.beta + ", " 
-39     + event.gamma; 
-40 } 
-41  
-42 function go(){ 
-43   if(window.DeviceMotionEvent){ 
-44     window.addEventListener("devicemotion", motion, false); 
-45   }else{ 
-46     var status = document.getElementById("status"); 
-47     status.innerHTML = status.innerHTML.replace( 
-48       "is supported", "is not supported" 
-49     ); 
-50   } 
-51   if(window.DeviceOrientationEvent){ 
-52     window.addEventListener("deviceorientation", orientation, false); 
-53   }else{ 
-54     var status = document.getElementById("status"); 
-55     status.innerHTML = status.innerHTML.replace( 
-56       "is supported", "is not supported" 
-57     ); 
-58   } 
-59 } 
-60 </script> 
-61 </head> 
-62 <body onload="go();"> 
-63 <div id="status"><a href=\"http://www.w3.org/TR/orientation-event/">http://www.w3.org/TR/orientation-event/</a> is supported.</div> 
-64 <br/><br/> 
-65 <div id="accelerometer"></div> 
-66 <br/><br/> 
-67 <div id="magnetometer"></div> 
-68 </body> 
-69 </html> 
+<!doctype html>
+<html lang="en"> 
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  
+  <style type="text/css">
+    body {
+      font-family: sans-serif;
+    }
+  
+      .main {
+      border: 1px solid black;
+      box-shadow: 10px 10px 5px #888;
+      border-radius: 12px;
+      padding: 20px;
+      background-color: #ddd;
+      margin: 25px;
+      width: 450px;
+      margin-left:auto;
+      margin-right:auto;  
+    }
+    
+    .logo {
+      width:275px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      padding: 15px;
+    }
+    
+    .container {
+      -webkit-perspective: 300; perspective: 300;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="main">
+      <h2>Device Orientation</h2>
+      <table>
+        <tr>
+          <td>Event Supported</td>
+          <td id="doEvent"></td>
+        </tr>
+        <tr>
+          <td>Tilt Left/Right [gamma]</td>
+          <td id="doTiltLR"></td>
+        </tr>
+        <tr>
+          <td>Tilt Front/Back [beta]</td>
+          <td id="doTiltFB"></td>
+        </tr>
+        <tr>
+          <td>Direction [alpha]</td>
+          <td id="doDirection"></td>
+        </tr>
+      </table>
+  </div>
+  
+  <div class="container" style="-webkit-perspective: 300; perspective: 300;">
+    <img src="http://www.html5rocks.com/en/tutorials/device/orientation/html5_logo.png" id="imgLogo" class="logo">
+  </div>
+  
+  <script type="text/javascript">
+    init();
+    var count = 0;
+    
+    function init() {
+      if (window.DeviceOrientationEvent) {
+        document.getElementById("doEvent").innerHTML = "DeviceOrientation";
+        // Listen for the deviceorientation event and handle the raw data
+        window.addEventListener('deviceorientation', function(eventData) {
+          // gamma is the left-to-right tilt in degrees, where right is positive
+          var tiltLR = eventData.gamma;
+          
+          // beta is the front-to-back tilt in degrees, where front is positive
+          var tiltFB = eventData.beta;
+          
+          // alpha is the compass direction the device is facing in degrees
+          var dir = eventData.alpha
+          
+          // call our orientation event handler
+          deviceOrientationHandler(tiltLR, tiltFB, dir);
+          }, false);
+      } else {
+        document.getElementById("doEvent").innerHTML = "Not supported on your device or browser.  Sorry."
+      }
+    }
+  
+    function deviceOrientationHandler(tiltLR, tiltFB, dir) {
+      document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
+      document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
+      document.getElementById("doDirection").innerHTML = Math.round(dir);
+      
+      // Apply the transform to the image
+      var logo = document.getElementById("imgLogo");
+      logo.style.webkitTransform = "rotate("+ tiltLR +"deg) rotate3d(1,0,0, "+ (tiltFB*-1)+"deg)";
+      logo.style.MozTransform = "rotate("+ tiltLR +"deg)";
+      logo.style.transform = "rotate("+ tiltLR +"deg) rotate3d(1,0,0, "+ (tiltFB*-1)+"deg)";
+    }
+    
+    
+    // Some other fun rotations to try...
+    //var rotation = "rotate3d(0,1,0, "+ (tiltLR*-1)+"deg) rotate3d(1,0,0, "+ (tiltFB*-1)+"deg)";
+    //var rotation = "rotate("+ tiltLR +"deg) rotate3d(0,1,0, "+ (tiltLR*-1)+"deg) rotate3d(1,0,0, "+ (tiltFB*-1)+"deg)";
+  </script>
+  
+  
+
+</body>
+</html>
