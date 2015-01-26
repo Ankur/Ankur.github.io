@@ -1,0 +1,15 @@
+body {
+    background-color: #3498db;
+}
+
+.stereo 
+{
+	width: 50%;
+	float: left;
+}
+
+.mono 
+{
+	width: 50%;
+	float: left;
+}
