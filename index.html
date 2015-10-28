@@ -26,7 +26,9 @@ Released under the MIT license: http://jsbin.mit-license.org
 </head>
 <body>
 
-  <button id="stahp" onclick="start()">STAHP</button>
+  <button id="stahp" onclick="start()">START</button> 
+  <button id="stop" onclick="stop()">STAHP</button>
+
   
     <button id="stahp" onclick="change(colors[0])">red</button>
   
@@ -48,6 +50,10 @@ setInterval(function() {
   $('body').css({'background-color': color});
   }
 });
+}
+
+function stop() {
+  on = false;
 }
 
 function change(color) {
