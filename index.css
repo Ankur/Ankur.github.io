@@ -1,0 +1,22 @@
+.column {
+    float: left;
+    width: 50%;
+  }
+  
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+a.linkedin {
+    font-size: 40px;
+  }
+
+button {
+   margin: auto;
+   width: 200px;
+   height: 100px;
+   font-size: 30px;
+}
