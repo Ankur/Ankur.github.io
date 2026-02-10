@@ -1,0 +1,49 @@
+name: Update Goodreads Gist
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Goodreads RSS and update gist
+        env:
+          GH_GIST_TOKEN: ${{ secrets.GH_GIST_TOKEN }}
+          GIST_ID: '379f9191e9bb1552cbea6bf2907f9276'
+          GOODREADS_USER_ID: '100350191'
+        run: |
+          RSS=$(curl -sf "https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read")
+          if [ -z "$RSS" ]; then
+            echo "Failed to fetch RSS feed"
+            exit 1
+          fi
+
+          JSON=$(python3 -c "
+          import xml.etree.ElementTree as ET, json, sys
+
+          root = ET.fromstring(sys.stdin.read())
+          books = []
+          for item in root.findall('.//item')[:10]:
+              title = (item.findtext('title') or '').strip()
+              author = (item.findtext('author_name') or '').strip()
+              book_id = (item.findtext('book_id') or '').strip()
+              if title:
+                  books.append({
+                      'title': title,
+                      'author': author,
+                      'bookId': book_id,
+                  })
+          print(json.dumps({'books': books, 'updated_at': '$(date -u +%Y-%m-%dT%H:%M:%SZ)'}, indent=2))
+          " <<< "$RSS")
+
+          ESCAPED=$(echo "$JSON" | python3 -c "import sys,json; print(json.dumps(sys.stdin.read().strip()))")
+
+          curl -sf -X PATCH "https://api.github.com/gists/${GIST_ID}" \
+            -H "Authorization: token ${GH_GIST_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "{\"files\":{\"goodreads-books.json\":{\"content\":${ESCAPED}}}}"
+
+          echo "Gist updated successfully"

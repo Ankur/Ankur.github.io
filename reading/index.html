@@ -36,11 +36,7 @@
     </div>
 
     <script>
-        const USER_ID = '100350191';
-        const PROXIES = [
-            'https://api.allorigins.win/raw?url=',
-            'https://corsproxy.io/?url=',
-        ];
+        const GIST_ID = '379f9191e9bb1552cbea6bf2907f9276';
 
         function renderItems(containerId, items) {
             const el = document.getElementById(containerId);
@@ -52,42 +48,24 @@
             el.innerHTML = `<p>- ${msg || 'could not load data'}</p>`;
         }
 
-        function parseBooks(xml) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(xml, 'text/xml');
-            const items = doc.querySelectorAll('item');
-            return Array.from(items).map(item => {
-                const get = tag => item.querySelector(tag)?.textContent?.trim() || '';
-                return {
-                    title: get('title'),
-                    author: get('author_name'),
-                    bookId: get('book_id'),
-                };
-            });
-        }
-
-        async function fetchWithFallback(url) {
-            for (const proxy of PROXIES) {
-                try {
-                    const res = await fetch(proxy + encodeURIComponent(url));
-                    if (res.ok) return await res.text();
-                } catch (e) {}
-            }
-            throw new Error('all proxies failed');
-        }
-
         async function loadRecentlyRead() {
             try {
-                const feedUrl = `https://www.goodreads.com/review/list_rss/${USER_ID}?shelf=read`;
-                const xml = await fetchWithFallback(feedUrl);
-                const books = parseBooks(xml);
+                const res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+                if (!res.ok) throw new Error('failed to fetch gist');
+
+                const gist = await res.json();
+                const file = gist.files['goodreads-books.json'];
+                if (!file) throw new Error('no goodreads data in gist');
+
+                const data = JSON.parse(file.content);
+                const books = data.books || [];
 
                 if (books.length === 0) {
                     renderError('recently-read', 'no books yet');
                     return;
                 }
 
-                renderItems('recently-read', books.slice(0, 10).map(b =>
+                renderItems('recently-read', books.map(b =>
                     `<a href="https://www.goodreads.com/book/show/${b.bookId}" target="_blank">${b.title}</a> — ${b.author}`
                 ));
             } catch (e) {
