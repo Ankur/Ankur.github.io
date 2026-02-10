@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankur Jain — Music</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <a href="../">about</a>
+        <a href="./">music</a>
+        <a href="../reading/">reading</a>
+    </nav>
+    <div class="container">
+        <div class="content">
+            <h1>music</h1>
+            <p class="tagline">pulled from spotify</p>
+
+            <div class="section">
+                <p class="section-header">now playing:</p>
+                <div class="items" id="now-playing">
+                    <p class="loading">loading...</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <p class="section-header">top artists:</p>
+                <div class="items" id="top-artists">
+                    <p class="loading">loading...</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <p class="section-header">top tracks:</p>
+                <div class="items" id="top-tracks">
+                    <p class="loading">loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GIST_ID = '379f9191e9bb1552cbea6bf2907f9276';
+        const LB_USER = 'supalightnin56';
+        const LB_BASE = 'https://api.listenbrainz.org/1';
+
+        function renderItems(containerId, items) {
+            const el = document.getElementById(containerId);
+            el.innerHTML = items.map(text => `<p>- ${text}</p>`).join('');
+        }
+
+        function renderError(containerId, msg) {
+            const el = document.getElementById(containerId);
+            el.innerHTML = `<p>- ${msg || 'could not load data'}</p>`;
+        }
+
+        async function loadNowPlaying() {
+            try {
+                const res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+                const gist = await res.json();
+                const content = JSON.parse(gist.files['now-playing.json'].content);
+
+                if (!content.is_playing || !content.track) {
+                    renderError('now-playing', 'nothing playing right now');
+                    return;
+                }
+
+                const link = content.url
+                    ? `<a href="${content.url}" target="_blank">${content.track}</a>`
+                    : content.track;
+                renderItems('now-playing', [
+                    `${link} — ${content.artist}`
+                ]);
+            } catch (e) {
+                renderError('now-playing');
+            }
+        }
+
+        async function loadTopArtists() {
+            try {
+                const res = await fetch(`${LB_BASE}/stats/user/${LB_USER}/artists?range=all_time&count=8`);
+                const data = await res.json();
+                const artists = data.payload?.artists;
+                if (!artists || artists.length === 0) {
+                    renderError('top-artists', 'no data yet — check back soon!');
+                    return;
+                }
+                renderItems('top-artists', artists.map(a => {
+                    const mbid = a.artist_mbids?.[0];
+                    const link = mbid
+                        ? `https://musicbrainz.org/artist/${mbid}`
+                        : `https://www.google.com/search?q=${encodeURIComponent(a.artist_name)}`;
+                    return `<a href="${link}" target="_blank">${a.artist_name}</a> (${a.listen_count} plays)`;
+                }));
+            } catch (e) {
+                renderError('top-artists');
+            }
+        }
+
+        async function loadTopTracks() {
+            try {
+                const res = await fetch(`${LB_BASE}/stats/user/${LB_USER}/recordings?range=all_time&count=8`);
+                const data = await res.json();
+                const tracks = data.payload?.recordings;
+                if (!tracks || tracks.length === 0) {
+                    renderError('top-tracks', 'no data yet — check back soon!');
+                    return;
+                }
+                renderItems('top-tracks', tracks.map(t => {
+                    const mbid = t.recording_mbid;
+                    const link = mbid
+                        ? `https://musicbrainz.org/recording/${mbid}`
+                        : `https://www.google.com/search?q=${encodeURIComponent(t.track_name + ' ' + t.artist_name)}`;
+                    return `<a href="${link}" target="_blank">${t.track_name}</a> — ${t.artist_name} (${t.listen_count} plays)`;
+                }));
+            } catch (e) {
+                renderError('top-tracks');
+            }
+        }
+
+        loadNowPlaying();
+        loadTopArtists();
+        loadTopTracks();
+    </script>
+</body>
+</html>

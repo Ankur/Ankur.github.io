@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankur Jain — Reading</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../index.css">
+    <style>
+        #recently-read {
+            gap: 0.75rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <a href="../">about</a>
+        <a href="../music/">music</a>
+        <a href="./">reading</a>
+    </nav>
+    <div class="container">
+        <div class="content">
+            <h1>reading</h1>
+            <p class="tagline">pulled from <a href="https://www.goodreads.com/user/show/100350191-ankur-jain" target="_blank">goodreads</a></p>
+
+            <div class="section">
+                <p class="section-header">recently read:</p>
+                <div class="items" id="recently-read">
+                    <p class="loading">loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const USER_ID = '100350191';
+        const PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?url=',
+        ];
+
+        function renderItems(containerId, items) {
+            const el = document.getElementById(containerId);
+            el.innerHTML = items.map(text => `<p>- ${text}</p>`).join('');
+        }
+
+        function renderError(containerId, msg) {
+            const el = document.getElementById(containerId);
+            el.innerHTML = `<p>- ${msg || 'could not load data'}</p>`;
+        }
+
+        function parseBooks(xml) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(xml, 'text/xml');
+            const items = doc.querySelectorAll('item');
+            return Array.from(items).map(item => {
+                const get = tag => item.querySelector(tag)?.textContent?.trim() || '';
+                return {
+                    title: get('title'),
+                    author: get('author_name'),
+                    bookId: get('book_id'),
+                };
+            });
+        }
+
+        async function fetchWithFallback(url) {
+            for (const proxy of PROXIES) {
+                try {
+                    const res = await fetch(proxy + encodeURIComponent(url));
+                    if (res.ok) return await res.text();
+                } catch (e) {}
+            }
+            throw new Error('all proxies failed');
+        }
+
+        async function loadRecentlyRead() {
+            try {
+                const feedUrl = `https://www.goodreads.com/review/list_rss/${USER_ID}?shelf=read`;
+                const xml = await fetchWithFallback(feedUrl);
+                const books = parseBooks(xml);
+
+                if (books.length === 0) {
+                    renderError('recently-read', 'no books yet');
+                    return;
+                }
+
+                renderItems('recently-read', books.slice(0, 10).map(b =>
+                    `<a href="https://www.goodreads.com/book/show/${b.bookId}" target="_blank">${b.title}</a> — ${b.author}`
+                ));
+            } catch (e) {
+                renderError('recently-read');
+            }
+        }
+
+        loadRecentlyRead();
+    </script>
+</body>
+</html>

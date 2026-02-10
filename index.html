@@ -3,132 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ankur Jain - Portfolio</title>
+    <title>Ankur Jain</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <!-- Animation Canvas -->
-    <canvas id="animationCanvas"></canvas>
-    
-    <!-- Floating Pear -->
-    <div id="floatingPear" class="floating-pear">🍐</div>
-    
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="profile-section">
-                    <div class="profile-image-container">
-                        <img src="files/portrait.jpg" alt="Ankur Jain" class="profile-image">
-                        <div class="floating-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                    </div>
-                    <div class="hero-text">
-                        <h1 class="name">Ankur Jain</h1>
-                        <p class="title">Investor at Pear VC | ex: Google X, Berkeley M.E.T. | Building the future, one startup at a time 🚀</p>
-                        <div class="location-connections">
-                            <div class="info-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>San Francisco, CA</span>
-                            </div>
-                            <div class="info-item">
-                                <i class="fas fa-users"></i>
-                                <span>500+ connections</span>
-                            </div>
-                        </div>
-                        <div class="cta-buttons">
-                            <button class="btn btn-primary" onclick="window.open('https://www.linkedin.com/in/ankur-j/', '_blank')">
-                                <i class="fab fa-linkedin"></i>
-                                Connect on LinkedIn
-                            </button>
-                            <button class="btn btn-secondary" onclick="window.open('https://github.com/Ankur', '_blank')">
-                                <i class="fab fa-github"></i>
-                                View GitHub
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Navigation -->
-    <nav class="nav-tabs">
-        <div class="container">
-            <div class="tab-container">
-                <button class="tab active" data-tab="about">About</button>
-                <button class="tab" data-tab="experience">Experience</button>
-            </div>
-        </div>
+    <nav>
+        <a href="./">about</a>
+        <a href="./music/">music</a>
+        <a href="./reading/">reading</a>
     </nav>
+    <div class="container">
+        <div class="content">
+            <h1>ankur jain</h1>
+            <p class="tagline">hacker, swimmer, & citywalker</p>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <!-- About Section -->
-            <section id="about" class="content-section active">
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-lightbulb"></i>
-                        <h2>About Me</h2>
-                    </div>
-                    <div class="card-content">
-                        <p>Previously founded an edtech app and grew to 700K users. Built products to combat opioid addiction at Verily (Google Life Sciences). Now investing in the next generation of AI startups at Pear VC.</p>
-                        <p>I'm passionate about using technology to solve real-world problems, whether that's through education, healthcare, or empowering the next generation of entrepreneurs. My journey spans from hands-on engineering to product management at Google X, and now venture capital.</p>
-                    </div>
+            <div class="section">
+                <p class="section-header">currently:</p>
+                <div class="items">
+                    <p>- enjoying life :)</p>
+                    <p>- based in san francisco</p>
+                    <p>- probably riding the cable car</p>
                 </div>
-            </section>
+            </div>
 
-            <!-- Experience Section -->
-            <section id="experience" class="content-section">
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-briefcase"></i>
-                        <h2>Experience</h2>
-                    </div>
-                    <div class="card-content">
-                        <div class="experience-item">
-                            <h3>Investor - Pear VC</h3>
-                            <p class="date">2023 - Present</p>
-                            <p>Investing in the next generation of AI startups and helping founders build the future.</p>
-                        </div>
-                        <div class="experience-item">
-                            <h3>Product Manager - Google X (Verily)</h3>
-                            <p class="date">2020 - 2023</p>
-                            <p>Built products to combat opioid addiction and other healthcare challenges.</p>
-                        </div>
-                        <div class="experience-item">
-                            <h3>Founder - EdTech Startup</h3>
-                            <p class="date">2018 - 2020</p>
-                            <p>Founded and scaled an edtech app to 700K users.</p>
-                        </div>
-                    </div>
+            <div class="section">
+                <p class="section-header">previously:</p>
+                <div class="items">
+                    <p>- eng @ <a href="https://verily.com" target="_blank">google x (verily)</a> — built products to combat opioid addiction</p>
+                    <p>- founded an edtech startup — grew to 100k+ happy users</p>
+                    <p>- invested in early-stage ai startups @ <a href="https://www.pear.vc" target="_blank">pear vc</a></p>
+                    <p>- founding class of <a href="https://met.berkeley.edu" target="_blank">uc berkeley m.e.t.</a></p>
                 </div>
-            </section>
-        </div>
-    </main>
+            </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <h2>Let's Connect</h2>
-            <p>Always excited to chat about startups, AI, and the future of technology</p>
-            <div class="contact-buttons">
-                <button class="contact-btn" onclick="window.open('https://www.linkedin.com/in/ankur-j/', '_blank')">
-                    <i class="fab fa-linkedin"></i>
-                    LinkedIn
-                </button>
-                <button class="contact-btn" onclick="window.open('https://github.com/Ankur', '_blank')">
-                    <i class="fab fa-github"></i>
-                    GitHub
-                </button>
+            <div class="footer">
+                <p>ankur [dot] jain [at] berkeley [dot] edu</p>
+                <div class="socials">
+                    <a href="https://www.linkedin.com/in/ankur-j/" target="_blank" aria-label="LinkedIn" class="social-linkedin"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/Ankur" target="_blank" aria-label="GitHub" class="social-github"><i class="fab fa-github"></i></a>
+                    <a href="https://twitter.com/ankurkjain" target="_blank" aria-label="Twitter" class="social-twitter"><i class="fab fa-x-twitter"></i></a>
+                </div>
             </div>
         </div>
-    </footer>
-
-    <script src="script.js"></script>
+    </div>
 </body>
 </html>
