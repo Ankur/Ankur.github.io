@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <nav>
@@ -19,7 +18,7 @@
     <div class="container">
         <div class="content">
             <h1>music</h1>
-            <p class="tagline">pulled from spotify</p>
+            <p class="tagline">pulled from my listening history</p>
 
             <div class="section">
                 <p class="section-header">now playing:</p>
@@ -29,15 +28,36 @@
             </div>
 
             <div class="section">
+                <p class="section-header">all time:</p>
+                <div class="items" id="all-time-stats">
+                    <p class="loading">loading...</p>
+                </div>
+            </div>
+
+            <div class="section">
                 <p class="section-header">top artists:</p>
-                <div class="items" id="top-artists">
+                <div class="items" id="top-artists-alltime">
                     <p class="loading">loading...</p>
                 </div>
             </div>
 
             <div class="section">
                 <p class="section-header">top tracks:</p>
-                <div class="items" id="top-tracks">
+                <div class="items" id="top-tracks-alltime">
+                    <p class="loading">loading...</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <p class="section-header">top artists recently:</p>
+                <div class="items" id="top-artists-recent">
+                    <p class="loading">loading...</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <p class="section-header">top tracks recently:</p>
+                <div class="items" id="top-tracks-recent">
                     <p class="loading">loading...</p>
                 </div>
             </div>
@@ -46,8 +66,6 @@
 
     <script>
         const GIST_ID = '379f9191e9bb1552cbea6bf2907f9276';
-        const LB_USER = 'supalightnin56';
-        const LB_BASE = 'https://api.listenbrainz.org/1';
 
         function renderItems(containerId, items) {
             const el = document.getElementById(containerId);
@@ -56,76 +74,110 @@
 
         function renderError(containerId, msg) {
             const el = document.getElementById(containerId);
-            el.innerHTML = `<p>- ${msg || 'could not load data'}</p>`;
+            el.innerHTML = `<p class="loading">${msg || 'could not load data'}</p>`;
         }
 
-        async function loadNowPlaying() {
+        function fmtHours(ms) {
+            return (ms / 3600000).toFixed(1) + 'h';
+        }
+
+        function trackUri2Url(uri) {
+            if (!uri) return null;
+            const parts = uri.split(':');
+            if (parts.length === 3 && parts[0] === 'spotify' && parts[1] === 'track') {
+                return `https://open.spotify.com/track/${parts[2]}`;
+            }
+            return null;
+        }
+
+        async function loadAllStats() {
             try {
                 const res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+                if (!res.ok) throw new Error(`Gist fetch failed: ${res.status}`);
                 const gist = await res.json();
-                const content = JSON.parse(gist.files['now-playing.json'].content);
 
-                if (!content.is_playing || !content.track) {
-                    renderError('now-playing', 'nothing playing right now');
+                // Now playing
+                try {
+                    const np = JSON.parse(gist.files['now-playing.json'].content);
+                    if (!np.is_playing || !np.track) {
+                        renderError('now-playing', 'nothing playing right now');
+                    } else {
+                        const link = np.url
+                            ? `<a href="${np.url}" target="_blank">${np.track}</a>`
+                            : np.track;
+                        renderItems('now-playing', [`${link} — ${np.artist}`]);
+                    }
+                } catch (e) {
+                    renderError('now-playing', 'could not load now playing');
+                }
+
+                // Stats
+                if (!gist.files['stats.json']) {
+                    const msg = 'stats not yet computed — check back soon!';
+                    ['all-time-stats', 'top-artists-alltime', 'top-tracks-alltime',
+                     'top-artists-recent', 'top-tracks-recent'].forEach(id => renderError(id, msg));
                     return;
                 }
 
-                const link = content.url
-                    ? `<a href="${content.url}" target="_blank">${content.track}</a>`
-                    : content.track;
-                renderItems('now-playing', [
-                    `${link} — ${content.artist}`
-                ]);
-            } catch (e) {
-                renderError('now-playing');
-            }
-        }
+                const stats = JSON.parse(gist.files['stats.json'].content);
 
-        async function loadTopArtists() {
-            try {
-                const res = await fetch(`${LB_BASE}/stats/user/${LB_USER}/artists?range=all_time&count=8`);
-                const data = await res.json();
-                const artists = data.payload?.artists;
-                if (!artists || artists.length === 0) {
-                    renderError('top-artists', 'no data yet — check back soon!');
-                    return;
+                // All-time summary
+                const days = (stats.total_ms_played / 86400000).toFixed(1);
+                renderItems('all-time-stats', [`${days} days of music since 2013`]);
+
+                // Top artists all-time
+                if (stats.top_artists_alltime && stats.top_artists_alltime.length > 0) {
+                    renderItems('top-artists-alltime', stats.top_artists_alltime.map(a =>
+                        `${a.name || 'unknown artist'} (${fmtHours(a.ms_played)})`
+                    ));
+                } else {
+                    renderError('top-artists-alltime', 'no data');
                 }
-                renderItems('top-artists', artists.map(a => {
-                    const mbid = a.artist_mbids?.[0];
-                    const link = mbid
-                        ? `https://musicbrainz.org/artist/${mbid}`
-                        : `https://www.google.com/search?q=${encodeURIComponent(a.artist_name)}`;
-                    return `<a href="${link}" target="_blank">${a.artist_name}</a> (${a.listen_count} plays)`;
-                }));
-            } catch (e) {
-                renderError('top-artists');
-            }
-        }
 
-        async function loadTopTracks() {
-            try {
-                const res = await fetch(`${LB_BASE}/stats/user/${LB_USER}/recordings?range=all_time&count=8`);
-                const data = await res.json();
-                const tracks = data.payload?.recordings;
-                if (!tracks || tracks.length === 0) {
-                    renderError('top-tracks', 'no data yet — check back soon!');
-                    return;
+                // Top tracks all-time
+                if (stats.top_tracks_alltime && stats.top_tracks_alltime.length > 0) {
+                    renderItems('top-tracks-alltime', stats.top_tracks_alltime.map(t => {
+                        const url = trackUri2Url(t.uri);
+                        const nameLink = url
+                            ? `<a href="${url}" target="_blank">${t.name}</a>`
+                            : t.name;
+                        return `${nameLink} — ${t.artist || 'unknown'} (${fmtHours(t.ms_played)})`;
+                    }));
+                } else {
+                    renderError('top-tracks-alltime', 'no data');
                 }
-                renderItems('top-tracks', tracks.map(t => {
-                    const mbid = t.recording_mbid;
-                    const link = mbid
-                        ? `https://musicbrainz.org/recording/${mbid}`
-                        : `https://www.google.com/search?q=${encodeURIComponent(t.track_name + ' ' + t.artist_name)}`;
-                    return `<a href="${link}" target="_blank">${t.track_name}</a> — ${t.artist_name} (${t.listen_count} plays)`;
-                }));
+
+                // Top artists recently
+                if (stats.top_artists_recent && stats.top_artists_recent.length > 0) {
+                    renderItems('top-artists-recent', stats.top_artists_recent.map(a =>
+                        `${a.name || 'unknown artist'} (${fmtHours(a.ms_played)})`
+                    ));
+                } else {
+                    renderError('top-artists-recent', 'no data');
+                }
+
+                // Top tracks recently
+                if (stats.top_tracks_recent && stats.top_tracks_recent.length > 0) {
+                    renderItems('top-tracks-recent', stats.top_tracks_recent.map(t => {
+                        const url = trackUri2Url(t.uri);
+                        const nameLink = url
+                            ? `<a href="${url}" target="_blank">${t.name}</a>`
+                            : t.name;
+                        return `${nameLink} — ${t.artist || 'unknown'} (${fmtHours(t.ms_played)})`;
+                    }));
+                } else {
+                    renderError('top-tracks-recent', 'no data');
+                }
+
             } catch (e) {
-                renderError('top-tracks');
+                ['now-playing', 'all-time-stats', 'top-artists-alltime', 'top-tracks-alltime',
+                 'top-artists-recent', 'top-tracks-recent'].forEach(id =>
+                    renderError(id, 'could not load data')
+                );
             }
         }
 
-        loadNowPlaying();
-        loadTopArtists();
-        loadTopTracks();
+        loadAllStats();
     </script>
 </body>
 </html>
